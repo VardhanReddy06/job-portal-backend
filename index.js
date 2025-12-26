@@ -3,23 +3,27 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import companyRoutes from "./routes/companyRoutes.js";
 
 dotenv.config({});
 const app=express();
  
 //middelwares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const corsOptions = {
     origin:"http://localhost:",
     Credentials:true
 }
 app.use(cors(corsOptions));
-app.get('/',(req,res)=>{
-    res.send("server running succesfully")
-});
+
+app.use("/api/user",userRoutes);
+app.use("/api/company",companyRoutes);
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT,()=>{
     connectDB();
     console.log(`server is running on PORT ${PORT}`)
